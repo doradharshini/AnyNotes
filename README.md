@@ -18,7 +18,7 @@ Notes Sharing Web Application
 Clone the project
 
 ```bash
-  git clone https://github.com/JKaliraj/ZeroNotes.git
+  git clone https://github.com/doradharshini/ZeroNotes.git
 ```
 
 Go to the project directory
@@ -73,12 +73,3 @@ For admin dashboard
 
 To deploy this project refer 
 [django-on-pythonanywhere](https://zappycode.com/tutorials/deploy-django-project-on-pythonanywhere)
-
-
-
-
-## Support
-
-For support, email mailtozerosoft@gmail.com
-
-
