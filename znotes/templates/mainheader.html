@@ -1,0 +1,163 @@
+{% load static %}
+
+<style>
+  .header-logo2 , .menu-bar{
+    display: none;
+  }
+   @media (max-width: 600px){
+    .main-content-header{
+      background-color: #47bcd4;
+    }
+    .header-logo2{
+      display: block;
+      font-size: 1.25em;
+    color: #fff;
+    font-weight: 700;
+    }
+    .menu-bar{
+      display: block;
+    }
+    /*  */
+    .msidebar {
+    width: 100%;
+    height: calc(100% - 80px);
+    color: #0093E9;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: 0px 5px 5px 10px;
+    position: relative;
+    gap: 10px;
+    
+  }
+
+  .item {
+    width: 95%;
+    height: fit-content;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  .sidebar-logout {
+    position: absolute;
+    bottom: 20px;
+  }
+  .sidebar-logout a{
+    color: rgb(240, 35, 70) !important;
+  }
+  .mybtn{
+    width: fit-content;
+    height: fit-content;
+    font-size: 28px;
+    color: #4eb8dd !important;
+    font-weight: 800;
+    transition: background-color 0.2s ease-out;
+    text-decoration: none;
+  }
+  .searchdiv{
+    display: none;
+  }
+  .msearchdiv input{
+    font-size: 22px;
+    color: #4eb8dd !important;
+    font-weight: 600;
+  }
+  .msearchdiv button{
+    font-size: 22px;
+    font-weight: 600;
+  }
+
+
+   }
+</style>
+<div class="main-content-header">
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title mybtn" id="offcanvasExampleLabel" style="margin-left: 10px;text-decoration: underline;text-underline-offset: 10px;">Menu</h5>
+      <button type="button" class="mybtn" data-bs-dismiss="offcanvas" aria-label="Close" style="border: none;outline: none;background-color: transparent;"><i class="fa fa-close"></i></button>
+    </div>
+    <div class="offcanvas-body">
+
+      <div class="container msearchdiv" style="width: fit-content;">
+        <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
+          {% csrf_token %}
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+      </div>
+
+      <br><br>
+      <div class="msidebar">
+        <a class="mybtn" href="{% url 'uploadnotes' %}" >
+           Upload Notes
+         </a>
+        <a class="mybtn" href="{% url 'home' %}" >
+        Home
+        </a>
+        <a class="mybtn" href="{% url 'profile' user.id %}" >
+         Profile
+        </a>
+    
+        
+        <div class="mybtn">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"> 
+               Departments</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item mybtn" href="{% url 'dept' 'cse' %}" style="display: flex;align-items: center;justify-content: center; gap: 50px;"> <i class="fa fa-television" aria-hidden="true" style="width: 20px;"></i> <span>CSE</span></a></li>
+              <li><a class="dropdown-item  mybtn" href="{% url 'dept' 'ece' %}"  style="display: flex;align-items: center;justify-content: center; gap: 50px;"> <i class="fa fa-lightbulb-o" aria-hidden="true" style="width: 20px;"></i> <span>ECE</span></a></li>
+              <li><a class="dropdown-item mybtn" href="{% url 'dept' 'eee' %}"  style="display: flex;align-items: center;justify-content: center; gap: 50px;"> <i class="fa fa-microchip" aria-hidden="true" style="width: 20px;"></i> <span>EEE</span></a></li>
+              <li><a class="dropdown-item mybtn" href="{% url 'dept' 'mech' %}" style="display: flex;align-items: center;justify-content: center; gap: 50px;"> <i class="fa fa-wrench" aria-hidden="true" style="width: 20px;"></i> <span>MECH</span></a></li>
+              <li><a class="dropdown-item mybtn" href="{% url 'dept' 'civil' %}" style="display: flex;align-items: center;justify-content: center; gap: 50px;"> <i class="fa fa-building" aria-hidden="true" style="width: 20px;"></i> <span>CIVIL</span></a></li>
+              <li> <hr class="dropdown-divider"> </li>
+              <li><a class="dropdown-item mybtn" href="{% url 'dept' 'others' %}"> <span>Others</span></a></li>
+            </ul>
+          </li>
+        </div>
+    
+       
+    
+        <div class="mybtn sidebar-logout"><a class="navbar-brand" href="{% url 'logout_user' %}">
+           Logout</a> </div>
+    
+      </div>
+      
+    </div>
+  </div>
+
+
+
+  <div class="menu-bar">
+    <button class="btn d-flex justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+      <i class="fa fa-bars" style="color:white;font-size: 24px;"></i>
+    </button>
+  </div>
+
+  <div class="container searchdiv" style="width: fit-content;">
+    <form class="d-flex" role="search" method="POST" action="{% url 'search' %}">
+      {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+
+  <div class="header-logo2">
+    <a class="navbar-brand" href="{% url 'home' %}"> <img src="{% static 'images/zeronotes.png' %}" alt="">
+      <sub>ZeroNotes</sub></a>
+  </div>
+
+    <div class="profile-pic">
+      {% if user.profile.profile_pic %}
+      <a href="{% url 'profile' user.id %}" style="text-decoration: none;"><img src="{{ user.profile.profile_pic.url }}" alt="">  </a>
+      {% else %}
+      <a href="{% url 'profile' user.id %}" style="text-decoration: none;"><img src="{% static 'images/default_profile-s.png' %}" alt="">  </a>
+      {% endif %}
+    </div>
+
+</div>

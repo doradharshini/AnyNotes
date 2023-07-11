@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<style>
+   @media (max-width: 600px){
+  .sidebar{
+    display: none !important;
+  }
+  .main-content{
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+}
+
+.mycol{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+<div class="main">
+
+  {% include 'sidebar.html' %}
+
+  <div class="main-content" >
+
+    {% include 'mainheader.html' %}
+
+    <div class="main-content-body" >
+      {% if notes %}
+      <h4> Latest</h4>
+      <div class="row row-cols-1 row-cols-md-3">
+
+        {% for i in notes %}
+        <div class="mycol" style=" padding: 0;">
+          <div class="mycard">
+            <!-- <div class="mycard-header">
+              <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
+            </div> -->
+            <div class="mycard-body">
+              <a href="{% url 'dept' i.department %}" style="text-decoration: none;margin-bottom: 10px;"><span
+                  class="tag tag-teal">{{i.department}}</span></a>
+
+              <h4>
+                <a href="{% url 'shownotes' i.id %}" style="text-decoration: none;color: black;">{{i.title | slice:50 }}</a>
+              </h4>
+              <p>
+                {{i.body | slice:80}}...
+              </p>
+              <div class="user">
+                <!-- <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" /> -->
+                <div class="user-info">
+                  <h5><a href="{% url 'profile' i.author.id %}"
+                      style="text-decoration: none; font-size: 14px; color: #0e99e5;">@{{i.author}}</a></h5>
+                  <small>{{i.date_created | date:'M, Y'}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <br><br>
+      <nav aria-label="Page navigation example" >
+      
+        <ul class="pagination justify-content-center">
+    
+          {% if notes.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+          {% else %}
+              <li class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+          {% endif %}
+          
+          {% if notes.number|add:'-4' > 1 %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.number|add:'-5' }}">&hellip;</a></li>
+          {% endif %}
+          
+          {% for i in notes.paginator.page_range %}
+              {% if notes.number == i %}
+                  <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% elif i > notes.number|add:'-5' and i < notes.number|add:'5' %}
+                  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+          {% endfor %}
+          
+          {% if notes.paginator.num_pages > notes.number|add:'4' %}
+              <li  class="page-item"><a class="page-link" href="?page={{ notes.number|add:'5' }}">&hellip;</a></li>
+          {% endif %}
+          
+          {% if notes.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+          {% else %}
+              <li  class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+          {% endif %}
+          
+          </ul>
+    
+          <br><br>
+        </nav>
+      {% else %}
+    <div class="container h-100 d-flex justify-content-center align-items-center flex-column">
+        <h3>No Notes</h3>
+        <a href="{% url 'uploadnotes' %}" class="text-decoration-none">Upload Your Notes</a>
+    </div>
+      {%endif%}
+      {% comment %}
+      {{notes}}
+      previous : {{notes.has_previous }}
+      next : {{notes.has_next }}
+      current : {{notes.number }}
+      total : {{notes.paginator.num_pages }}
+      {% endcomment %}
+
+      
+
+    </div>
+    <!-- <nav aria-label="Page navigation example" class="d-flex justify-content-center" style="position: absolute;bottom: 0;margin: auto;width: calc(100% - 200px);">
+      <ul class="pagination">
+    {% if notes.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{notes.previous_page_number}}">Previous</a></li>
+    {% else %}
+    <li class="page-item disabled">
+      <span class="page-link">Previous</span>
+    </li>
+    {% endif %}
+    <li class="page-item"><a class="page-link disabled">{{notes}}</a></li>
+
+    
+    {% if notes.has_next %}
+    <li class="page-item"><a class="page-link"href="?page={{notes.next_page_number}}">Next</a></li>
+    {% else %}
+    <li class="page-item disabled">
+      <span class="page-link">Next</span>
+    </li>
+    {% endif %}
+  </ul>
+    </nav> -->
+    
+  </div>
+
+</div>
+</div>
+
+{%else%}
+<style>
+  nav {
+    position: absolute;
+    width: fit-content;
+    right: 0px;
+    top: 30px;
+  }
+
+  nav a {
+    text-decoration: none;
+    font-size: 30px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-right: 25px;
+  }
+
+  .banner-area h2 {
+    font-size: 65px;
+    margin: 0 0 25px;
+  }
+
+  .banner-area {
+    width: 100%;
+    height: 100vh;
+    color: white;
+    background-position: center;
+    -webkit-background-size: cover;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 2vw;
+    font-weight: 700;
+    background-image: url('{% static "images/bg.jpg" %}'); 
+    background-attachment:cover; 
+    user-select: none;
+  }
+
+  .btn {
+    text-decoration: none;
+    padding: 10px 50px;
+    color: #fff;
+    border: 3px solid #fff;
+    transition: 0.6s ease;
+    animation: animate 2s 1;
+    font-size: 15px;
+    font-weight: 900;
+  }
+
+  .btn:hover {
+    background-color: #fff;
+    color: #000;
+  }
+
+  @keyframes animate {
+    0% {
+      transform: scale(0);
+    }
+
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  h2,
+  p {
+    animation: animate 0.5s 1;
+
+  }
+
+  p {
+    font-size: 18px;
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  /* effect-shine */
+a.effect-shine:hover {
+  -webkit-mask-image: linear-gradient(-75deg, rgba(0,0,0,.6) 30%, #000 50%, rgba(0,0,0,.6) 70%);
+  -webkit-mask-size: 200%;
+  animation: shine 2s infinite;
+}
+
+@-webkit-keyframes shine {
+  from {
+    -webkit-mask-position: 150%;
+  }
+  
+  to {
+    -webkit-mask-position: -50%;
+  }
+}
+
+  @media (max-width: 600px) {
+    nav {
+      right: 10px;
+      font-size: 20px;
+    }
+
+    nav a {
+      font-size: 20px;
+      margin-right: 7px;
+    }
+
+    .banner-area h2 {
+
+      font-size: 28px;
+    }
+  }
+  
+</style>
+<nav>
+  <a href="{% url 'login_user' %}" class="effect-shine">Login</a>
+  <a href="{% url 'register' %}" class="effect-shine">Register</a>
+</nav>
+<div class="banner-area">
+
+  <h2>Zero Notes</h2>
+  <p>Unleash the Power of Knowledge, Together!</p>
+  <!-- <a href="#" class="btn">Contact us</a> -->
+</div>
+{% endif %}
+
+{% endblock %}

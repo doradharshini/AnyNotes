@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<style>
+  @media (max-width: 600px){
+ .sidebar{
+   display: none !important;
+ }
+ .main-content{
+   width: 100vw !important;
+   height: 100vh !important;
+ }
+}
+.mycol{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+
+<div class="main">
+
+  {% include 'sidebar.html' %}
+
+  <div class="main-content">
+
+    {% include 'mainheader.html' %}
+    
+    <div class="main-content-body">
+      <h4> Results for "{{search}}" </h4>
+      <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        {% if notes %}
+        {% for i in notes %}
+        <div class="mycol" style=" padding: 0;">
+          <div class="mycard">
+            <!-- <div class="mycard-header">
+              <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
+            </div> -->
+            <div class="mycard-body">
+              <a href="{% url 'dept' i.department %}" style="text-decoration: none;margin-bottom: 10px;"><span class="tag tag-teal">{{i.department}}</span></a>
+  
+              <h4>
+                <a href="{% url 'shownotes' i.id %}" style="text-decoration: none;color: black;">{{i.title | slice:50 }}</a>
+              </h4>
+              <p>
+                {{i.body | slice:80}}...
+              </p>
+              <div class="user">
+                <!-- <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" /> -->
+                <div class="user-info">
+                  <h5><a href="{% url 'profile' i.author.id %}" style="text-decoration: none; font-size: 14px; color: #0e99e5;">@{{i.author}}</a></h5>
+                  <small>{{i.date_created | date:'M, Y'}}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="book">
+          <span class="page turn"></span>
+          <span class="page turn"></span>
+          <span class="page turn"></span>
+          <span class="page turn"></span>
+          <span class="page turn"></span>
+          <span class="page turn"></span>
+          <span class="cover"></span>
+          <span class="page"></span>
+          <span class="cover turn"></span>
+        </div>
+        <p>No Notes Found</p>
+        {% endif %}
+
+      </div>
+      <br><br>
+
+      {% if notes %}
+      <nav aria-label="Page navigation example" >
+      
+        <ul class="pagination justify-content-center">
+    
+          {% if notes.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+          {% else %}
+              <li class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-left" aria-hidden="true"></i></span></li>
+          {% endif %}
+          
+          {% if notes.number|add:'-4' > 1 %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.number|add:'-5' }}">&hellip;</a></li>
+          {% endif %}
+          
+          {% for i in notes.paginator.page_range %}
+              {% if notes.number == i %}
+                  <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+              {% elif i > notes.number|add:'-5' and i < notes.number|add:'5' %}
+                  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+          {% endfor %}
+          
+          {% if notes.paginator.num_pages > notes.number|add:'4' %}
+              <li  class="page-item"><a class="page-link" href="?page={{ notes.number|add:'5' }}">&hellip;</a></li>
+          {% endif %}
+          
+          {% if notes.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ notes.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+          {% else %}
+              <li  class="page-item disabled"><span class="page-link"><i class="fa fa-chevron-right" aria-hidden="true"></i></span></li>
+          {% endif %}
+          
+          </ul>
+    
+          <br><br>
+        </nav>
+        {% endif  %}
+    </div>
+  </div>
+
+</div>
+</div>
+
+{%else%}
+<style>
+h3{
+  margin: 0 0 12px;
+    display: block;
+    font-size: 1.25em;
+    color: #217093;
+    font-weight: 700;
+    font-family: inherit;}
+    
+    .mybtn{
+      display: block;
+    margin: 0;
+    padding: 10px 20px;
+    background-color: #4eb8dd;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.55em;
+    color: #FFF;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+    }
+</style>
+<div class="d-flex h-100 justify-content-center align-items-center flex-column">
+<h3>Please Login to continue!</h3>
+<a href="{% url 'login_user' %}" class="mybtn">Login</a>
+</div>
+
+{% endif %}
+
+{% endblock %}

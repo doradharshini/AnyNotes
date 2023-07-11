@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% if user.is_authenticated %}
+<style>
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+    form {
+    width: 500px;
+    height: fit-content;
+    background-color: #FFF;
+    margin: 0;
+    padding: 2.25em;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+    -webkit-font-smoothing: antialiased;
+    overflow: scroll;
+
+  }
+
+
+  form label {
+    margin: 0 0 12px;
+    display: block;
+    font-size: 1.25em;
+    color: #217093;
+    font-weight: 700;
+    font-family: inherit;
+  }
+
+  form input[type=email],
+  form input[type=text],
+  form input[type=number],
+  form input[type=url],
+  form input[type=search],
+  form input[type=password] {
+    display: block;
+    margin: 0;
+    padding: 0 1em 0;
+    background-color: #f3fafd;
+    border: solid 2px #217093;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 55px;
+    font-size: 1.15em;
+    color: #353538;
+    font-weight: 600;
+    font-family: inherit;
+    transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+    padding: 0.4em 1em 0.5em !important;
+  }
+
+  form input[type=email]:focus,
+  form input[type=text]:focus,
+  form input[type=number]:focus,
+  form input[type=file]:focus,
+  form input[type=search]:focus,
+  form input[type=password]:focus {
+    outline: none;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    border: solid 2px #4eb8dd;
+  }
+  form input[type=file]{
+    
+    display: block;
+    margin: 0;
+    padding: 0 1em 0;
+    background-color: #f3fafd;
+    border: solid 2px #217093;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 55px;
+    font-size: 1.15em;
+    color: #353538;
+    font-weight: 600;
+    font-family: inherit;
+    transition: box-shadow 0.2s linear, border-color 0.25s ease-out;
+    padding: 0.4em 1em 0.5em !important;
+    
+    color: #353538;
+  }
+
+  form button {
+    display: block;
+    margin: 0;
+    padding: 0.65em 1em 1em;
+    background-color: #4eb8dd;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: 100%;
+    height: 65px;
+    font-size: 1.55em;
+    color: #FFF;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+  }
+  .mybtn{
+    display: block;
+    margin: auto;
+    padding: 7px 20px;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.55em;
+    color: #4eb8dd;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+    text-decoration: none;
+  }
+  h2{
+    font-size: 1.40em;
+    color: #217093;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  #id_body, #id_department{
+    font-size: 1.30em;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  form button:hover,
+  form button:active {
+    background-color: #217093;
+  }
+
+
+  form  .helper {
+    transform: translate(1em, 1.55em) scale(0.6);
+    opacity: 1;
+  }
+
+  form  input[type=password] {
+    padding: 0.4em 1em 0.5em;
+  }
+
+  form  input[type=text] {
+    padding: 0.025em 1em 0;
+  }
+  
+
+  body{
+      background-color: white !important;
+    }
+  @media (max-width: 600px){
+    body{
+      background-color: white !important;
+      width: 100vw;
+      height: 100vh;
+    }
+    form{
+      padding: 10px;
+      max-width: 100%;
+      max-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    h2{
+    font-size: 1.65em;
+    color: #217093;
+    font-weight: 600;
+    font-family: inherit;
+  }
+  .mybtn{
+    display: block;
+    margin: auto;
+    padding: 7px 20px;
+    border: none;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 24px;
+    color: #4eb8dd;
+    font-weight: 400;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+    text-decoration: none;
+  }
+  }
+  ::-webkit-scrollbar{
+          width: 0;
+          background-color: transparent;
+        }
+
+</style>
+
+<div class="container">
+<h2 class="text-center">Share Your Notes <img src="{% static 'images/hands.png' %}" width="60" height="60"></h2>
+
+    <form action="{% url 'uploadnotes' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <input type="file" name="myfiles" autocomplete="off" required multiple>
+
+        <br>
+        <br>
+        <button type="submit" class=""> &nbsp&nbsp Upload &nbsp&nbsp</button>
+        <a href="{% url 'home' %}" class="mybtn">&nbsp&nbspCancel&nbsp&nbsp</a>
+        <br><br><br>
+    </form>
+</div>
+</div>
+
+{%else%}
+<style>
+h3{
+  margin: 0 0 12px;
+    display: block;
+    font-size: 1.25em;
+    color: #217093;
+    font-weight: 700;
+    font-family: inherit;}
+    
+    .mybtn{
+      display: block;
+    margin: 0;
+    padding: 10px 20px;
+    background-color: #4eb8dd;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.55em;
+    color: #FFF;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+    }
+</style>
+<div class="d-flex h-100 justify-content-center align-items-center flex-column">
+<h3>Please Login to Upload Your Note!</h3>
+<a href="{% url 'login_user' %}" class="mybtn">Login</a>
+</div>
+
+{% endif %}
+{% endblock %}

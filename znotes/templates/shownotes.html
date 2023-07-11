@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+{% if user.is_authenticated %}
+<style>
+  @media (max-width: 600px) {
+    .sidebar {
+      display: none !important;
+    }
+
+    .main-content {
+      width: 100vw !important;
+      height: 100vh !important;
+    }
+  }
+
+  .filelogo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+  }
+
+  .filelogo img {
+    max-width: fit-content;
+    max-height: 80px;
+  }
+</style>
+<div class="main">
+  {% include 'sidebar.html' %}
+  <div class="main-content">
+    {% include 'mainheader.html' %}
+
+    <div class="main-content-body">
+      <div class="row">
+        <div class="col">
+          <h3>{{note.title}} <small style="font-size: 18px;">({{note.department}})</small></h3>
+          <small class="text-muted">
+            <a href="{% url 'profile' note.author.id %}" style="text-decoration: none;">@{{note.author}}</a>
+            {{note.date_created | date:'M d, Y'}}
+          </small>
+
+          <hr>
+          <br>
+          <p class="w-100" align="justify" style="word-wrap: break-word;">{{note.body}}</p>
+          <br>
+
+
+          {% if myfiles %}
+          <hr>
+          <h3>Files</h3>
+          <div class="row row-cols-1 row-cols-md-4 g-4">
+            {% for myfile in myfiles %}
+
+
+            <div class="col">
+              <div class="card h-100">
+                <div class="filelogo">
+                  {% if myfile.extension == '.pdf' %}
+                  <img src="{% static 'images/pdf.png' %}" class="card-img-top" alt="{{ myfile.file.name }}">
+                  {% elif myfile.extension == '.png' %}
+                  <img src="{{ myfile.file.url }}" class="card-img-top" alt="{{ myfile.file.name }}">
+                  {% elif myfile.extension == '.jpg' %}
+                  <img src="{{ myfile.file.url }}" class="card-img-top" alt="{{ myfile.file.name }}">
+                  {% elif myfile.extension == '.doc' %}
+                  <img src="{% static 'images/word.png' %}" class="card-img-top" alt="{{ myfile.file.name }}">
+                  {% else %}
+                  <img src="{% static 'images/file.png' %}" class="card-img-top" alt="{{ myfile.file.name }}">
+                  {% endif %}
+                </div>
+                <div class="card-body">
+                  <p class="card-text">{{ myfile.file.name |cut:'files/' }}</p>
+                  <p class="card-text">{{ myfile.file.size | filesizeformat}}</p>
+                </div>
+                <div class="card-footer">
+                  <small class="text-body-secondary"><a href="{{ myfile.file.url }}" target="new"
+                      style="text-decoration: none;text-align: center;display: block;">Download</a></small>
+                </div>
+
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <hr>
+          <a href="{% url 'home' %}" class="btn btn-primary">Back</a> &nbsp; &nbsp;
+          {%if user.is_authenticated and user.id == note.author.id %}
+          <a href="{% url 'delete' note.id %}" class="btn btn-danger">Delete</a>
+          {% endif %}
+          <br><br>
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</div>
+
+
+{%else%}
+<style>
+  h3 {
+    margin: 0 0 12px;
+    display: block;
+    font-size: 1.25em;
+    color: #217093;
+    font-weight: 700;
+    font-family: inherit;
+  }
+
+  .mybtn {
+    display: block;
+    margin: 0;
+    padding: 10px 20px;
+    background-color: #4eb8dd;
+    border: none;
+    border-radius: 4px;
+    box-sizing: border-box;
+    box-shadow: none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 1.55em;
+    color: #FFF;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.2s ease-out;
+  }
+</style>
+<div class="d-flex h-100 justify-content-center align-items-center flex-column">
+  <h3>Please Login to View this Note!</h3>
+  <a href="{% url 'login_user' %}" class="mybtn">Login</a>
+</div>
+
+{% endif %}
+
+{% endblock %}

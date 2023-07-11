@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+{% if user.is_authenticated %}
+
+<style>
+    @media (max-width: 600px) {
+        .sidebar {
+            display: none !important;
+        }
+
+        .main-content {
+            width: 100vw !important;
+            height: 100vh !important;
+        }
+
+        .main-content-body {
+            width: 100vw !important;
+            height: 100vh !important;
+            padding: 0 !important;
+            overflow-y: scroll !important;
+
+        }
+
+        .card {
+            width: 100vw !important;
+            height: fit-content !important;
+            padding: 0 !important;
+            padding-bottom: 50px !important;
+        }
+
+        .rounded-top {
+            border-radius: 0px !important;
+
+        }
+    }
+
+    .mycol {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+</style>
+<div class="main">
+
+    {% include 'sidebar.html' %}
+
+    <div class="main-content">
+
+        {% include 'mainheader.html' %}
+
+        <div class="main-content-body">
+            <div class="row d-flex justify-content-center align-items-center h-100 w-100">
+                <div class="col col-lg-9 col-xl-7 w-100 h-100">
+                    <div class="card w-100">
+                        {% if myuser.profile_pic %}
+                        <div class="rounded-top text-white d-flex flex-row blur-background" style="
+                            background-color: #000; 
+                            height:200px;
+                            background-image: url('{{ myuser.profile_pic.url }}');
+                            background-size: cover;">
+                            {% else %}
+                            <div class="rounded-top text-white d-flex flex-row blur-background" style="
+                            background-color: #000; 
+                            height:200px;">
+                                {% endif %}
+                                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;min-height: 150px;">
+
+                                    {% if myuser.profile_pic %}
+                                    <img src="{{ myuser.profile_pic.url }}" alt="Generic placeholder image"
+                                        class="img-fluid img-thumbnail mt-4 mb-2"
+                                        style="min-width: 150px;min-height: 150px; z-index: 1;object-fit: cover;">
+                                    {% else %}
+
+                                    <img src="{% static 'images/default_profile-s.png' %}"
+                                        alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                        style="min-width: 150px;min-height: 150px; z-index: 1;">
+
+                                    {% endif %}
+
+
+                                    {% if user.username == myuser.name.username %}
+                                    <a href="{% url 'editprofile' %}" class="btn btn-dark"
+                                        data-mdb-ripple-color="dark" style="z-index: 1;">
+                                        Edit profile
+                                    </a>
+                                    {% endif %}
+
+
+                                </div>
+                                <div class="ms-3" style="margin-top: 130px;">
+                                    <h5>{{myuser.name.username | upper}}</h5>
+                                    <!-- <p>New York</p> -->
+                                    <div class="d-flex justify-content-start">
+                                        {% if myuser.website_link %}
+                                        <a href="https://{{myuser.website_link}}"><i class="fa fa-globe fa-lg me-3"></i></a>
+                                        {%endif%}
+                                        {% if myuser.facebook_link %}
+                                        <a href="https://{{myuser.facebook_link}}"><i class="fa fa-facebook-f fa-lg me-3"></i></a>
+                                        {%endif%}
+                                        {% if myuser.instagram_link %}
+                                        <a href="https://{{myuser.instagram_link}}"><i class="fa fa-instagram fa-lg me-3"></i></a>
+                                        {%endif%}
+                                        {% if myuser.linkedin_link %}
+                                        <a href="https://{{myuser.linkedin_link}}"><i class="fa fa-linkedin fa-lg me-3"></i></a>
+                                        {%endif%}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                                <div class="d-flex justify-content-end text-center py-1">
+                                    <div>
+                                        <p class="mb-1 h5">{{userpostcount}}</p>
+                                        <p class="small text-muted mb-0">Posts</p>
+                                    </div>
+                                    <div class="px-3">
+                                        <!-- <p class="mb-1 h5">0</p>
+                                    <p class="small text-muted mb-0">Followers</p> -->
+                                    </div>
+                                    <div>
+                                        <!-- <p class="mb-1 h5">0</p>
+                                    <p class="small text-muted mb-0">Following</p> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body p-4 text-black">
+                                {%if myuser.bio%}
+                                <div class="mb-5">
+                                    <p class="lead fw-normal mb-1">About</p>
+                                    <div class="p-4" style="background-color: #f8f9fa;">
+                                        <p class="font-italic mb-1">{{myuser.bio}}</p>
+                                    </div>
+                                </div>
+                                {%endif%}
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <p class="lead fw-normal mb-0">Recent posts</p>
+                                    {% if userpost %}
+                                    <p class="mb-0"><a href="{% url 'showall' myuser.id %}" class="text-muted">Show
+                                            all</a></p>
+                                    {% endif %}
+                                </div>
+
+                                {% if userpost %}
+                                <div class="row">
+                                    <div class="mycol">
+                                        {% for i in userpost %}
+                                        <div class="mycard">
+                                            <!-- <div class="mycard-header">
+                                            <img src="https://c0.wallpaperflare.com/preview/483/210/436/car-green-4x4-jeep.jpg" alt="rover" />
+                                            </div> -->
+                                            <div class="mycard-body">
+                                                <a href="{% url 'dept' i.department %}"
+                                                    style="text-decoration: none;margin-bottom: 10px;"><span
+                                                        class="tag tag-teal">{{i.department}}</span></a>
+
+                                                <h4>
+                                                    <a href="{% url 'shownotes' i.id %}"
+                                                        style="text-decoration: none;color: black;">{{i.title | slice:50}}</a>
+                                                </h4>
+                                                <p>
+                                                    {{i.body | slice:80}}...
+                                                </p>
+                                                <div class="user">
+                                                    <!-- <img src="https://yt3.ggpht.com/a/AGF-l7-0J1G0Ue0mcZMw-99kMeVuBmRxiPjyvIYONg=s900-c-k-c0xffffffff-no-rj-mo" alt="user" /> -->
+                                                    <div class="user-info">
+                                                        <h5><a href="{% url 'profile' i.author.id %}"
+                                                                style="text-decoration: none; font-size: 14px; color: #0e99e5;">@{{i.author}}</a>
+                                                        </h5>
+                                                        <small>{{i.date_created | date:'M, Y'}}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                {% else %}
+                                <div class="row g-2 text-center">
+                                    <p>No Notes Uploaded! <br>
+                                        {% if user == myuser.name %}
+                                        Click to <a href="{% url 'uploadnotes' %}"
+                                            style="text-decoration: none;width: fit-content;">
+                                            Upload Notes
+                                        </a>
+                                        {%endif%}
+                                    </p>
+
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- For Extra Bottom Space -->
+                <br><br><br>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% else %}
+<style>
+    h3 {
+        margin: 0 0 12px;
+        display: block;
+        font-size: 1.25em;
+        color: #217093;
+        font-weight: 700;
+        font-family: inherit;
+    }
+
+    .mybtn {
+        display: block;
+        margin: 0;
+        padding: 10px 20px;
+        background-color: #4eb8dd;
+        border: none;
+        border-radius: 4px;
+        box-sizing: border-box;
+        box-shadow: none;
+        width: fit-content;
+        height: fit-content;
+        font-size: 1.55em;
+        color: #FFF;
+        font-weight: 600;
+        font-family: inherit;
+        transition: background-color 0.2s ease-out;
+    }
+</style>
+<div class="d-flex h-100 justify-content-center align-items-center flex-column">
+    <h3>Please Login to View Profile!</h3>
+    <a href="{% url 'login_user' %}" class="mybtn">Login</a>
+</div>
+{% endif %}
+
+
+
+{% endblock %}
