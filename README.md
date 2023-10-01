@@ -1,25 +1,25 @@
 
-# ZeroNotes
+# AnyNotes
 
 Notes Sharing Web Application
 
 
 ## 🚀 Demo
 
-[ZeroNotes](https://zeronotes.pythonanywhere.com)
+[AnyNotes](https://zeronotes.pythonanywhere.com)
 
 ## 💻 Run Locally
 
 Clone the project
 
 ```bash
-  git clone https://github.com/doradharshini/ZeroNotes.git
+  git clone https://github.com/doradharshini/AnyNotes.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd ZeroNotes/
+  cd AnyNotes/
 ```
 
 Install dependencies
